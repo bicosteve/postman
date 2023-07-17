@@ -1,0 +1,401 @@
+{
+	"info": {
+		"_postman_id": "de92b113-c4b5-48df-ac30-5e6aae3493b3",
+		"name": "14. Team Collaboration",
+		"description": "This is a collection about team collaborations and work flows\n\n1. The process is for checking history changes, data is stored, code can be reviewed.\n2. Make Change -> Export File -> Commit File -> Push change\n3. Pull Changes -> Import File -> Make a Change -> Export File -> Commit File -> Push\n    \n\nGood and ideal for teams.\n\n**HOW TO SHARE COLLECTION WITH GIT**",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9302397"
+	},
+	"item": [
+		{
+			"name": "Generate Reference",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// the valuse are created in a data.json file externally",
+							"// customerID, productID",
+							"// use the runner to download the json file and run",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"{{title}}\",\n    \"body\":\"my body\",\n    \"userId\":1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://httpbin.org/uuid",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"uuid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"",
+							"// Check rererence",
+							"pm.test('Should contain the reference id ',function(){",
+							"    pm.expect(response.json.referenceId).to.eql(pm.globals.get('referenceId'));",
+							"})",
+							"",
+							"// Check customer id",
+							"pm.test('Should contain the customer id', ()=>{",
+							"    pm.expect(response.json.customerId).to.eql(pm.iterationData.get(\"customerId\"));",
+							"})",
+							"",
+							"// Check product id",
+							"pm.test('Should contain the product id',()=>{",
+							"    pm.expect(response.json.productId).to.eql(pm.iterationData.get(\"productId\"))",
+							"    //pm.iterationData -> will get the data from the json file ",
+							"})",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"referenceId\":\"{{rererenceId}}\",\n    \"customerId\":\"{{customerId}}\",\n    \"productId\":\"{{productId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://httpbin.org/post",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order Is Valid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"",
+							"//iterationData is the json file created to run externally",
+							"",
+							"// Check rererence",
+							"if(pm.variables.get('isValid')){",
+							"    pm.test('Should contain the reference id ',function(){",
+							"    pm.expect(response.json.referenceId).to.eql(pm.globals.get('referenceId'));",
+							"})",
+							"",
+							"// Check customer id",
+							"pm.test('Should contain the customer id', ()=>{",
+							"    pm.expect(response.json.customerId).to.eql(pm.variables.get(\"customerId\"));",
+							"})",
+							"",
+							"// Check product id",
+							"pm.test('Should contain the product id',()=>{",
+							"    pm.expect(response.json.productId).to.eql(pm.variables.get(\"productId\"))",
+							"    //pm.iterationData -> will get the data from the json file ",
+							"})",
+							"} else {",
+							"    pm.test('Should not be valid',()=>{",
+							"        pm.expect(response.json).to.be.null;",
+							"    })",
+							"}",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"referenceId\":\"{{rererenceId}}\",\n    \"customerId\":\"{{customerId}}\",\n    \"productId\":\"{{productId}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://httpbin.org/post",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Status",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//const response = pm.response.json();",
+							"",
+							"pm.test('Check status 200 OK',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"//console.log(response);",
+							"",
+							"/*",
+							"",
+							"{",
+							"    \"customerId\":9000,",
+							"    \"productId\": 5,",
+							"    \"status\":200,",
+							"    \"expected\":200",
+							"}",
+							" */",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"{{title}}\",\n    \"body\":\"my body\",\n    \"userId\":1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://httpbin.org/status/200",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"status",
+						"200"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Status 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//const response = pm.response.json();",
+							"",
+							"pm.test('Check status 200 OK',()=>{",
+							"    pm.response.to.have.status(200);",
+							"})",
+							"",
+							"pm.test('Status code 200',function(){",
+							"    pm.response.to.have.status(pm.iterationData.get('expectedStatus'))",
+							"})",
+							"",
+							"//console.log(response);",
+							"",
+							"/*",
+							"",
+							"{",
+							"    \"customerId\":9000,",
+							"    \"productId\": 5,",
+							"    \"status\":200,",
+							"    \"expected\":200",
+							"}",
+							" */",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"{{title}}\",\n    \"body\":\"my body\",\n    \"userId\":1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://httpbin.org/status/{{status}}",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"status",
+						"{{status}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "customerId",
+			"value": "100",
+			"type": "string"
+		},
+		{
+			"key": "productId",
+			"value": "200",
+			"type": "string"
+		},
+		{
+			"key": "status",
+			"value": "200",
+			"type": "string"
+		},
+		{
+			"key": "expectedStatus",
+			"value": "200",
+			"type": "string"
+		}
+	]
+}
